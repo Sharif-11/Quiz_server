@@ -15,9 +15,18 @@ class UserController {
 
     try {
       const user = await this.userService.createUser(name, email, password)
-      res.status(201).json(user) // Send the created user object as JSON response
+      res.status(201).json({
+        statusCode: 201,
+        success: true,
+        message: 'User created successfully',
+        data: user,
+      }) // Send the created user object as JSON response
     } catch (error: any) {
-      res.status(500).json({ statusCode: 500, message: error.message }) // Handle error response with status code and message
+      res.status(500).json({
+        statusCode: 500,
+        success: false,
+        message: error.message,
+      }) // Handle error response with status code and message
     }
   }
 
@@ -27,9 +36,18 @@ class UserController {
 
     try {
       const admin = await this.userService.createAdmin(name, email, password)
-      res.status(201).json(admin) // Send the created admin object as JSON response
+      res.status(201).json({
+        statusCode: 201,
+        success: true,
+        message: 'Admin created successfully',
+        data: admin,
+      }) // Send the created admin object as JSON response
     } catch (error: any) {
-      res.status(500).json({ statusCode: 500, message: error.message }) // Handle error response with status code and message
+      res.status(500).json({
+        statusCode: 500,
+        success: false,
+        message: error.message,
+      }) // Handle error response with status code and message
     }
   }
 
@@ -42,9 +60,18 @@ class UserController {
         email,
         password,
       )
-      res.status(200).json({ token, user: userWithoutToken }) // Send token and user object without password as JSON response
+      res.status(200).json({
+        statusCode: 200,
+        success: true,
+        message: 'Login successful',
+        data: { token, user: userWithoutToken },
+      }) // Send token and user object without password as JSON response
     } catch (error: any) {
-      res.status(401).json({ statusCode: 401, message: error.message }) // Handle error response with status code and message
+      res.status(401).json({
+        statusCode: 401,
+        success: false,
+        message: error.message,
+      }) // Handle error response with status code and message
     }
   }
 
@@ -54,9 +81,18 @@ class UserController {
 
     try {
       const user = await this.userService.getUserByEmail(email)
-      res.status(200).json(user) // Send user object as JSON response
+      res.status(200).json({
+        statusCode: 200,
+        success: true,
+        message: 'User retrieved successfully',
+        data: user,
+      }) // Send user object as JSON response
     } catch (error: any) {
-      res.status(404).json({ statusCode: 404, message: error.message }) // Handle error response with status code and message
+      res.status(404).json({
+        statusCode: 404,
+        success: false,
+        message: error.message,
+      }) // Handle error response with status code and message
     }
   }
 }
