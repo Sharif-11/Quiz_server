@@ -1,12 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Request, Response } from 'express'
 import UserService from './user.services'
-
+const userService = new UserService()
 class UserController {
-  private userService: UserService
-
   constructor() {
-    this.userService = new UserService() // Instantiate the UserService
+    // this.userService = new UserService() // Instantiate the UserService
   }
 
   // POST /api/users/register
@@ -14,7 +12,7 @@ class UserController {
     const { name, email, password } = req.body
 
     try {
-      const user = await this.userService.createUser(name, email, password)
+      const user = await userService.createUser(name, email, password)
       res.status(201).json({
         statusCode: 201,
         success: true,
@@ -35,7 +33,7 @@ class UserController {
     const { name, email, password } = req.body
 
     try {
-      const admin = await this.userService.createAdmin(name, email, password)
+      const admin = await userService.createAdmin(name, email, password)
       res.status(201).json({
         statusCode: 201,
         success: true,
@@ -56,7 +54,7 @@ class UserController {
     const { email, password } = req.body
 
     try {
-      const { token, ...userWithoutToken } = await this.userService.userLogin(
+      const { token, ...userWithoutToken } = await userService.userLogin(
         email,
         password,
       )
@@ -80,7 +78,7 @@ class UserController {
     const { email } = req.params
 
     try {
-      const user = await this.userService.getUserByEmail(email)
+      const user = await userService.getUserByEmail(email)
       res.status(200).json({
         statusCode: 200,
         success: true,

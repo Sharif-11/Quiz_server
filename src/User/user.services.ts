@@ -1,13 +1,8 @@
 import AuthUtils from '../Utils/utils.service'
 import User from './user.models'
-import { IUser } from './user.types'
 
 class UserService {
-  public async createUser(
-    name: string,
-    email: string,
-    password: string,
-  ): Promise<IUser> {
+  public async createUser(name: string, email: string, password: string) {
     try {
       const hashedPassword = await AuthUtils.hashPassword(password)
 
@@ -17,18 +12,15 @@ class UserService {
         role: 'user',
         password: hashedPassword,
       })
-
-      return user
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { password: _, ...userWithoutPassword } = user.toJSON()
+      return userWithoutPassword
     } catch (error) {
       throw new Error('User creation failed')
     }
   }
 
-  public async createAdmin(
-    name: string,
-    email: string,
-    password: string,
-  ): Promise<IUser> {
+  public async createAdmin(name: string, email: string, password: string) {
     const existingAdmin = await User.findOne({ role: 'admin' })
 
     if (existingAdmin) {
@@ -42,7 +34,9 @@ class UserService {
         role: 'admin',
         password: hashedPassword,
       })
-      return admin
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { password: _, ...adminWithoutPassword } = admin.toJSON()
+      return adminWithoutPassword
     } catch (error) {
       throw new Error('Admin creation failed')
     }
@@ -66,7 +60,7 @@ class UserService {
 
     const token = AuthUtils.generateToken({ userId: user._id, role: user.role })
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { password: _, ...userWithoutPassword } = user
+    const { password: _, ...userWithoutPassword } = user.toJSON()
     return { ...userWithoutPassword, token }
   }
   public async getUserByEmail(email: string) {
@@ -75,7 +69,9 @@ class UserService {
       if (!user) {
         throw new Error('User not found')
       }
-      return user
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { password: _, ...userWithoutPassword } = user.toJSON()
+      return userWithoutPassword
     } catch (error) {
       throw new Error('Error retrieving user information')
     }
